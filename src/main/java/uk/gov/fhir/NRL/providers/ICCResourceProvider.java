@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor.providers;
+package uk.gov.fhir.NRL.providers;
 
 import ca.uhn.fhir.rest.server.IResourceProvider;
 

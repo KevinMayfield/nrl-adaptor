@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor.support;
+package uk.gov.fhir.NRL.support;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;

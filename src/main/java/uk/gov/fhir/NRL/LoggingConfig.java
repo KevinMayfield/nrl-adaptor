@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor;
+package uk.gov.fhir.NRL;
 
 import org.springframework.context.annotation.Configuration;
 

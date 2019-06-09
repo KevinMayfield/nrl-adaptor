@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor.support;
+package uk.gov.fhir.NRL.support;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

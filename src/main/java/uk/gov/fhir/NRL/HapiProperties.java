@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor;
+package uk.gov.fhir.NRL;
 
 import ca.uhn.fhir.context.ConfigurationException;
 import ca.uhn.fhir.context.FhirVersionEnum;

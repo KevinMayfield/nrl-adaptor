@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor.support;
+package uk.gov.fhir.NRL.support;
 
 import com.google.gson.JsonObject;
 import org.jglue.fluentjson.JsonBuilderFactory;

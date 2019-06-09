@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor.providers;
+package uk.gov.fhir.NRL.providers;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -9,7 +9,6 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import org.hl7.fhir.dstu3.model.Condition;
 import org.hl7.fhir.dstu3.model.IdType;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.DocumentReference;
@@ -17,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.fhir.NRLAdaptor.dao.IDocumentReference;
-import uk.gov.fhir.NRLAdaptor.support.OperationOutcomeFactory;
+import uk.gov.fhir.NRL.dao.IDocumentReference;
+import uk.gov.fhir.NRL.support.OperationOutcomeFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

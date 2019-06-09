@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor;
+package uk.gov.fhir.NRL;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import uk.gov.fhir.NRLAdaptor.support.CorsFilter;
-import uk.gov.fhir.NRLAdaptor.support.NRLSSPInterceptor;
+import uk.gov.fhir.NRL.support.CorsFilter;
+import uk.gov.fhir.NRL.support.NRLSSPInterceptor;
 
 @SpringBootApplication
 public class NRLAdaptor {

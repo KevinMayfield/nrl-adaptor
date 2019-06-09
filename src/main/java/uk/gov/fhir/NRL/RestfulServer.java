@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRLAdaptor;
+package uk.gov.fhir.NRL;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
@@ -12,8 +12,8 @@ import ca.uhn.fhir.util.VersionUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
 
-import uk.gov.fhir.NRLAdaptor.providers.*;
-import uk.gov.fhir.NRLAdaptor.support.ServerInterceptor;
+import uk.gov.fhir.NRL.providers.*;
+import uk.gov.fhir.NRL.support.ServerInterceptor;
 
 
 import javax.servlet.ServletException;
