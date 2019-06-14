@@ -1,10 +1,10 @@
-package uk.gov.fhir.NRL.support;
+package uk.gov.wildfyre.NRL.support;
 
 import ca.uhn.fhir.rest.client.api.IClientInterceptor;
 import ca.uhn.fhir.rest.client.api.IHttpRequest;
 import ca.uhn.fhir.rest.client.api.IHttpResponse;
 import io.jsonwebtoken.Jwts;
-import uk.gov.fhir.NRL.HapiProperties;
+import uk.gov.wildfyre.NRL.HapiProperties;
 
 import java.io.IOException;
 import java.util.*;

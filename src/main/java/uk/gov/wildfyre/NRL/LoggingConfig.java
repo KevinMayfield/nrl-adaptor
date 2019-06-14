@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL;
+package uk.gov.wildfyre.NRL;
 
 import org.springframework.context.annotation.Configuration;
 

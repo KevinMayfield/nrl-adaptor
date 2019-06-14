@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL.providers;
+package uk.gov.wildfyre.NRL.providers;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.fhir.NRL.dao.IDocumentReference;
-import uk.gov.fhir.NRL.support.OperationOutcomeFactory;
+import uk.gov.wildfyre.NRL.dao.IDocumentReference;
+import uk.gov.wildfyre.NRL.support.OperationOutcomeFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

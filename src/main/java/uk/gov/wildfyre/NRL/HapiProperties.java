@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL;
+package uk.gov.wildfyre.NRL;
 
 import ca.uhn.fhir.context.ConfigurationException;
 import ca.uhn.fhir.context.FhirVersionEnum;

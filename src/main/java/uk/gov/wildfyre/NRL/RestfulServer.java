@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL;
+package uk.gov.wildfyre.NRL;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
@@ -13,7 +13,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
 
 import uk.gov.fhir.NRL.providers.*;
-import uk.gov.fhir.NRL.support.ServerInterceptor;
+import uk.gov.wildfyre.NRL.providers.ConformanceProvider;
+import uk.gov.wildfyre.NRL.providers.DocumentReferenceResourceProvider;
+import uk.gov.wildfyre.NRL.support.ServerInterceptor;
 
 
 import javax.servlet.ServletException;

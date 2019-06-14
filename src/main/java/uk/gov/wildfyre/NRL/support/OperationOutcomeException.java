@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL.support;
+package uk.gov.wildfyre.NRL.support;
 
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.OperationOutcome;

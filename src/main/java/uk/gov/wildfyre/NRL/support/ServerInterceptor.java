@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL.support;
+package uk.gov.wildfyre.NRL.support;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.EncodingEnum;

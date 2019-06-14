@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL.providers;
+package uk.gov.wildfyre.NRL.providers;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.parser.DataFormatException;
@@ -11,7 +11,7 @@ import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import uk.gov.fhir.NRL.HapiProperties;
+import uk.gov.wildfyre.NRL.HapiProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;

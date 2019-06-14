@@ -1,4 +1,4 @@
-package uk.gov.fhir.NRL.providers;
+package uk.gov.wildfyre.NRL.providers;
 
 import ca.uhn.fhir.rest.server.IResourceProvider;
 
