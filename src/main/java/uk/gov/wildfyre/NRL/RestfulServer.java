@@ -12,7 +12,6 @@ import ca.uhn.fhir.util.VersionUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
 
-import uk.gov.fhir.NRL.providers.*;
 import uk.gov.wildfyre.NRL.providers.ConformanceProvider;
 import uk.gov.wildfyre.NRL.providers.DocumentReferenceResourceProvider;
 import uk.gov.wildfyre.NRL.support.ServerInterceptor;

@@ -14,10 +14,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import uk.gov.wildfyre.NRL.support.CorsFilter;
 import uk.gov.wildfyre.NRL.support.NRLSSPInterceptor;
 
 @SpringBootApplication
+@EnableSwagger2
 public class NRLAdaptor {
 
     @Autowired
