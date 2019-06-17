@@ -17,8 +17,17 @@ public class NRLSSPInterceptor implements IClientInterceptor {
     public void interceptRequest(IHttpRequest iHttpRequest) {
 
 
-        iHttpRequest.addHeader("fromASID", HapiProperties.getNhsAsidFrom());
+        switch (iHttpRequest.getHttpVerbName()) {
+            case "POST":
+            case "PUT":
+            case "DELETE":
 
+                iHttpRequest.addHeader("fromASID","200000000118");
+                break;
+            default:
+                iHttpRequest.addHeader("fromASID", HapiProperties.getNhsAsidFrom());
+
+        }
 
         iHttpRequest.addHeader("toASID",HapiProperties.getNhsAsidTo());
 
@@ -29,7 +38,7 @@ public class NRLSSPInterceptor implements IClientInterceptor {
 
         // Build registered and custom Claims.
         CreatePayloadData createPayloadData = new CreatePayloadData();
-        String jsonString = createPayloadData.buildPayloadData(exp, iat, false);
+        String jsonString = createPayloadData.buildPayloadData(exp, iat, iHttpRequest.getHttpVerbName());
         String compactJws = Jwts.builder()
                 .setHeaderParam("alg", "none")
                 .setHeaderParam("typ", "JWT")

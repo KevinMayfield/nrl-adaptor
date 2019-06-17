@@ -1,23 +1,22 @@
 package uk.gov.wildfyre.NRL.providers;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import org.hl7.fhir.dstu3.model.IdType;
-import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.hl7.fhir.dstu3.model.DocumentReference;
+import org.hl7.fhir.dstu3.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.wildfyre.NRL.dao.IDocumentReference;
 import uk.gov.wildfyre.NRL.support.OperationOutcomeFactory;
+import uk.gov.wildfyre.NRL.support.ProviderResponseLibrary;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -44,7 +43,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return DocumentReference.class;
     }
 
-
+/*
     @Read
     public DocumentReference read(@IdParam IdType internalId) {
 
@@ -58,12 +57,37 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
 
         return documentReference;
     }
+*/
+
+
+    @Create
+    public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam DocumentReference documentReference) throws Exception {
+
+        MethodOutcome outcome =  resourceDao.create(client,documentReference, null,null);
+
+       // log.info(outcome.toString());
+        return outcome;
+
+    }
+
+    @Update
+    public MethodOutcome update(HttpServletRequest theRequest, @ResourceParam DocumentReference documentReference, @IdParam IdType theId, @ConditionalUrlParam String theConditional, RequestDetails theRequestDetails)
+    throws Exception {
+
+        MethodOutcome outcome =  resourceDao.create(client,documentReference, theId, theConditional);
+        //log.info(outcome.toString());
+        return outcome;
+
+    }
+
     @Search
     public List<DocumentReference> search(HttpServletRequest httpRequest,
-                                  @OptionalParam(name = DocumentReference.SP_PATIENT) ReferenceParam patient
+                                  @OptionalParam(name = DocumentReference.SP_PATIENT) ReferenceParam patient,
+                                          @OptionalParam(name = DocumentReference.SP_TYPE)      TokenParam type,
+                                          @OptionalParam(name = DocumentReference.SP_CUSTODIAN)      ReferenceParam org
     ) throws Exception {
 
-        return resourceDao.search(client,patient);
+        return resourceDao.search(client,patient, type, org);
 
 
     }

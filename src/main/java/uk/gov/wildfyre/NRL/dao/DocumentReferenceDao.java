@@ -1,14 +1,23 @@
 package uk.gov.wildfyre.NRL.dao;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IQuery;
+import ca.uhn.fhir.rest.gclient.ReferenceClientParam;
 import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.dstu3.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import uk.gov.wildfyre.NRL.support.OperationOutcomeException;
 
+import javax.print.Doc;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,17 +42,25 @@ public class DocumentReferenceDao implements IDocumentReference {
     }
 
     @Override
-    public List<DocumentReference> search(IGenericClient client, ReferenceParam patient) throws Exception {
+    public List<DocumentReference> search(IGenericClient client, ReferenceParam patient,  TokenParam type,
+                                          ReferenceParam org   ) throws Exception {
 
 
         List<DocumentReference> documents = new ArrayList<>();
-        Bundle result= null;
+        Bundle result = null;
+        IQuery query = client.search().forResource(DocumentReference.class)
+                .where(DocumentReference.SUBJECT.hasId("https://demographics.spineservices.nhs.uk/STU3/Patient/"+patient.getValue()));
 
         try {
-            result = client.search().forResource(DocumentReference.class)
-                    .where(DocumentReference.SUBJECT.hasId("https://demographics.spineservices.nhs.uk/STU3/Patient/"+patient.getValue()))
-                    .returnBundle(Bundle.class)
+            if (type != null ) {
+                query = query.and(DocumentReference.TYPE.exactly().systemAndValues(type.getSystem(), type.getValue()));
+            }
+            if (org != null) {
+                query = query.and(DocumentReference.CUSTODIAN.hasId(org.getValue()));
+            }
+              result = (Bundle) query.returnBundle(Bundle.class)
                     .execute();
+
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             ex.printStackTrace();
@@ -78,6 +95,116 @@ public class DocumentReferenceDao implements IDocumentReference {
         }
 
         return documents;
+    }
+
+    @Override
+    public MethodOutcome create(IGenericClient client, DocumentReference originalDocumentReference, IdType theId, String theConditional) throws OperationOutcomeException {
+
+        DocumentReference documentReference = (DocumentReference) originalDocumentReference;
+        if (theId == null) {
+            documentReference.setId("");
+        } else {
+            documentReference.setId(theId.getValue());
+        }
+
+        if (documentReference.hasSubject()) {
+            if (documentReference.getSubject().hasReference()) {
+                if (documentReference.getSubject().getReference().startsWith("Patient")) {
+                    documentReference.getSubject().setReference("https://demographics.spineservices.nhs.uk/STU3/"+documentReference.getSubject().getReference());
+                }
+                if (!documentReference.getSubject().getReference().contains("https://demographics.spineservices.nhs.uk/STU3/Patient/")) {
+                    throw new UnprocessableEntityException("Invalid subject reference");
+                }
+            }
+            if (documentReference.getSubject().hasIdentifier()) {
+                if (documentReference.getSubject().getIdentifier().getSystem().equals("https://fhir.nhs.uk/Id/nhs-number")) {
+                    documentReference.setSubject(new Reference("https://demographics.spineservices.nhs.uk/STU3/Patient/"+documentReference.getSubject().getIdentifier().getValue()));
+                }
+            }
+            if (!documentReference.getSubject().getReference().contains("https://demographics.spineservices.nhs.uk/STU3/Patient/")) {
+                throw new UnprocessableEntityException("Invalid subject reference");
+            }
+        } else {
+            throw new UnprocessableEntityException("Subject must be present");
+        }
+
+        documentReference.setIndexed(new Date());
+
+        if (documentReference.hasAuthor()) {
+            Reference masterRef = new Reference();
+
+            for (Reference ref : documentReference.getAuthor()) {
+                if (ref.hasReference()) {
+                    if (ref.getReference().startsWith("Organization")) {
+                        masterRef.setReference("https://directory.spineservices.nhs.uk/STU3/" + ref);
+                    } else {
+                        masterRef.setReference(ref.getReference());
+                    }
+                }
+                if (ref.hasIdentifier()) {
+                    if (ref.getIdentifier().getSystem().equals("https://fhir.nhs.uk/Id/ods-organization-code")) {
+                        masterRef.setReference("https://directory.spineservices.nhs.uk/STU3/Organization/" + ref.getIdentifier().getValue());
+                    }
+                }
+            }
+            if (!masterRef.hasReference() || !masterRef.getReference().contains("https://directory.spineservices.nhs.uk/STU3/Organization/")) {
+                throw new UnprocessableEntityException("Invalid Author reference");
+            } else {
+                documentReference.setAuthor(new ArrayList<>());
+                documentReference.getAuthor().add(masterRef);
+            }
+        } else {
+            throw new UnprocessableEntityException("Author must be present");
+        }
+
+        if (documentReference.hasCustodian()) {
+            Reference ref = documentReference.getCustodian();
+
+            if (ref.hasReference()) {
+                if (ref.getReference().startsWith("Organization")) {
+                    ref.setReference("https://directory.spineservices.nhs.uk/STU3/" + ref);
+                }
+            }
+            if (ref.hasIdentifier()) {
+                if (ref.getIdentifier().getSystem().equals("https://fhir.nhs.uk/Id/ods-organization-code")) {
+                    ref.setReference("https://directory.spineservices.nhs.uk/STU3/Organization/" + ref.getIdentifier().getValue());
+                }
+            }
+            log.info(ref.getReference());
+            if (!ref.hasReference() || !ref.getReference().contains("https://directory.spineservices.nhs.uk/STU3/Organization/")) {
+                throw new UnprocessableEntityException("Invalid Custodian reference");
+            } else {
+                ref.setIdentifier(null);
+            }
+        } else {
+            throw new UnprocessableEntityException("Custodian must be present");
+        }
+
+        documentReference.setType(null);
+
+        documentReference.getType().addCoding()
+                .setSystem("http://snomed.info/sct")
+                .setDisplay("Mental Health Crisis Plan")
+                .setCode("736253002");
+        documentReference.setContext(null);
+
+        System.out.println(FhirContext.forDstu3().newJsonParser().setPrettyPrint(true).encodeResourceToString(documentReference));
+
+        MethodOutcome outcome = null;
+        if (theId !=null) {
+            outcome = client.update().resource(documentReference).withId(theId).execute();
+        } else {
+            outcome = client.create().resource(documentReference).execute();
+        }
+        log.info(outcome.getId().getValue());
+        IdType idType = new IdType().setValue(outcome.getId().getValue().replace("?_id=","/"));
+        outcome.setId(idType);
+        documentReference.setId(idType);
+        outcome.setResource(documentReference);
+        log.info(outcome.getId().getValue());
+
+        return outcome;
+
     }
 
     Reference getReference(Reference reference) {

@@ -8,9 +8,17 @@ import java.util.Date;
 
 public class CreatePayloadData {
 
-    public String buildPayloadData(Date exp, Date iat, boolean write) {
+    public String buildPayloadData(Date exp, Date iat, String verbName) {
 
 
+        String scope = "patient/DocumentReference.read";
+        switch (verbName) {
+            case "POST":
+            case "PUT":
+            case "DELETE":
+                scope = "patient/DocumentReference.write";
+
+        }
 
         // Fluent Json is a Java fluent builder for creating JSON using Google Gson
         JsonObject jsonObject = JsonBuilderFactory.buildObject() //
@@ -24,7 +32,7 @@ public class CreatePayloadData {
 
                 // Custom Claims
                 .add("reason_for_request", "directcare") //
-                .add("scope", "patient/DocumentReference.read") //
+                .add("scope", scope) //
                 .add("requesting_system", "https://fhir.nhs.uk/Id/accredited-system|200000000117") //
                 .add("requesting_organization", "https://fhir.nhs.uk/Id/ods-organization-code|AMS01")
                 .add("requesting_user", "https://fhir.nhs.uk/Id/sds-role-profile-id|fakeRoleId")
