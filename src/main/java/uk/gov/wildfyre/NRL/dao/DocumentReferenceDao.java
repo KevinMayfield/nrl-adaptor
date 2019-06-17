@@ -29,8 +29,9 @@ public class DocumentReferenceDao implements IDocumentReference {
     @Override
     public DocumentReference read(IGenericClient client, IdType internalId) throws Exception {
 
-        List<DocumentReference> docs = search(client,null,null,null, new TokenParam().setValue(internalId.getValue()));
-        if (docs.size()>0) {
+        log.info(internalId.getValue());
+        List<DocumentReference> docs = search(client, null, null, null, new TokenParam().setValue(internalId.getIdPart()));
+        if (docs.size() > 0) {
             return docs.get(0);
         }
         return null;
@@ -48,7 +49,7 @@ public class DocumentReferenceDao implements IDocumentReference {
 
         if (patient != null) {
             String patientQry = patient.getValue();
-            if (patientQry.contains("https://demographics.spineservices.nhs.uk/STU3/Patient/")) {
+            if (!patientQry.contains("https://demographics.spineservices.nhs.uk/STU3/Patient/")) {
                 patientQry = "https://demographics.spineservices.nhs.uk/STU3/Patient/" + patient.getValue();
             }
             if (patient.getChain() != null && patient.getChain().contains("identifier")) {
@@ -57,6 +58,7 @@ public class DocumentReferenceDao implements IDocumentReference {
                     patientQry = "https://demographics.spineservices.nhs.uk/STU3/Patient/" + ids[1];
                 }
             }
+            log.trace(patientQry);
             query = client.search().forResource(DocumentReference.class)
                     .where(DocumentReference.SUBJECT.hasId(patientQry));
         } else {
@@ -69,32 +71,32 @@ public class DocumentReferenceDao implements IDocumentReference {
 
         }
 
-        try {
-            if (type != null) {
-                query = query.and(DocumentReference.TYPE.exactly().systemAndValues(type.getSystem(), type.getValue()));
-            }
-            if (org != null) {
-                String documentQry = org.getValue();
 
-
-                if (documentQry.contains("https://directory.spineservices.nhs.uk/STU3/Organization/")) {
-                    documentQry = "https://directory.spineservices.nhs.uk/STU3/Organization/" + org.getValue();
-                }
-                if (org.getChain() != null && org.getChain().contains("identifier")) {
-                    String[] ids = org.getValue().split("|");
-                    if (ids.length>1 && ids[0].contains("https://fhir.nhs.uk/Id/ods-organization-code")) {
-                        documentQry = "https://directory.spineservices.nhs.uk/STU3/Organization/" + ids[1];
-                    }
-                }
-                query = query.and(DocumentReference.CUSTODIAN.hasId(documentQry));
-            }
-            result = (Bundle) query.returnBundle(Bundle.class)
-                    .execute();
-
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
+        if (type != null) {
+            query = query.and(DocumentReference.TYPE.exactly().systemAndValues(type.getSystem(), type.getValue()));
         }
+        if (org != null) {
+            String documentQry = org.getValue();
+
+
+            if (!documentQry.contains("https://directory.spineservices.nhs.uk/STU3/Organization/")) {
+                documentQry = org.getValue();
+            } else {
+                documentQry = org.getValue().replace("https://directory.spineservices.nhs.uk/STU3/Organization/","");
+            }
+            if (org.getChain() != null && org.getChain().contains("identifier")) {
+                String[] ids = org.getValue().split("|");
+                if (ids.length > 1 && ids[0].contains("https://fhir.nhs.uk/Id/ods-organization-code")) {
+                    documentQry = ids[1];
+                }
+            }
+            log.info(documentQry);
+            query = query.and(DocumentReference.CUSTODIAN.hasChainedProperty(Organization.IDENTIFIER.exactly().systemAndValues("https://fhir.nhs.uk/Id/ods-organization-code", documentQry)) );
+        }
+
+        result = (Bundle) query.returnBundle(Bundle.class)
+                .execute();
+
 
         if (result != null && result.getEntry().size() > 0) {
             for (Bundle.BundleEntryComponent entry : result.getEntry()) {

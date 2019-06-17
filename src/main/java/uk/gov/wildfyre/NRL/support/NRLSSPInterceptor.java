@@ -28,6 +28,7 @@ public class NRLSSPInterceptor implements IClientInterceptor {
                 iHttpRequest.addHeader("fromASID", HapiProperties.getNhsAsidFrom());
 
         }
+        log.info(iHttpRequest.getUri());
 
         iHttpRequest.addHeader("toASID",HapiProperties.getNhsAsidTo());
 
@@ -44,7 +45,7 @@ public class NRLSSPInterceptor implements IClientInterceptor {
                 .setHeaderParam("typ", "JWT")
                 .setPayload(jsonString)
                 .compact();
-        log.info("STU3 JWT Created");
+        log.trace("STU3 JWT Created");
         iHttpRequest.addHeader("Authorization", "Bearer " + compactJws);
 
         iHttpRequest.removeHeaders("Accept");
@@ -57,7 +58,7 @@ public class NRLSSPInterceptor implements IClientInterceptor {
         Iterator it = headers.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
+            log.trace(pair.getKey() + " = " + pair.getValue());
         }
     }
 

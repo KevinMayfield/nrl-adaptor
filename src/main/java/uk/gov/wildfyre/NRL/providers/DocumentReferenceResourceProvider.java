@@ -68,7 +68,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return outcome;
 
     }
-
+/*
     @Update
     public MethodOutcome update(HttpServletRequest theRequest, @ResourceParam DocumentReference documentReference, @IdParam IdType theId, @ConditionalUrlParam String theConditional, RequestDetails theRequestDetails)
     throws Exception {
@@ -78,7 +78,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return outcome;
 
     }
-
+*/
     @Search
     public List<DocumentReference> search(HttpServletRequest httpRequest,
                                   @OptionalParam(name = DocumentReference.SP_PATIENT) ReferenceParam patient,
