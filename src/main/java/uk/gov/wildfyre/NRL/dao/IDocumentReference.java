@@ -16,11 +16,12 @@ import java.util.List;
 public interface IDocumentReference {
 
 
-    DocumentReference read(IGenericClient client, IdType internalId);
+    DocumentReference read(IGenericClient client, IdType internalId) throws Exception;
 
     List<DocumentReference> search(IGenericClient client, ReferenceParam patient,
             TokenParam type,
-            ReferenceParam org
+            ReferenceParam org,
+                                   TokenParam id
                                    ) throws Exception;
 
     MethodOutcome create(IGenericClient client,

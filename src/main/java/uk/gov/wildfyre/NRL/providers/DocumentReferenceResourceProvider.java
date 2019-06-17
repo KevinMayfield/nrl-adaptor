@@ -43,9 +43,9 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return DocumentReference.class;
     }
 
-/*
+
     @Read
-    public DocumentReference read(@IdParam IdType internalId) {
+    public DocumentReference read(@IdParam IdType internalId) throws Exception {
 
 
         DocumentReference documentReference = resourceDao.read(client, internalId);
@@ -57,7 +57,6 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
 
         return documentReference;
     }
-*/
 
 
     @Create
@@ -84,10 +83,11 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
     public List<DocumentReference> search(HttpServletRequest httpRequest,
                                   @OptionalParam(name = DocumentReference.SP_PATIENT) ReferenceParam patient,
                                           @OptionalParam(name = DocumentReference.SP_TYPE)      TokenParam type,
-                                          @OptionalParam(name = DocumentReference.SP_CUSTODIAN)      ReferenceParam org
+                                          @OptionalParam(name = DocumentReference.SP_CUSTODIAN)      ReferenceParam org,
+                                          @OptionalParam(name = DocumentReference.SP_RES_ID) TokenParam id
     ) throws Exception {
 
-        return resourceDao.search(client,patient, type, org);
+        return resourceDao.search(client,patient, type, org, id);
 
 
     }
