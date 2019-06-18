@@ -10,6 +10,7 @@ import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,24 @@ public class DocumentReferenceDao implements IDocumentReference {
             return docs.get(0);
         }
         return null;
+    }
+
+    @Override
+    public MethodOutcome delete(IGenericClient client, IdType internalId) throws Exception {
+        MethodOutcome method = new MethodOutcome();
+        IBaseOperationOutcome resp = client.delete().resourceById(internalId).execute();
+        if (resp != null) {
+            OperationOutcome outcome = (OperationOutcome) resp;
+            method.setOperationOutcome(outcome);
+            method.setCreated(false);
+        }
+        return method;
+    }
+
+    @Override
+    public MethodOutcome update(IGenericClient client, DocumentReference documentReference, IdType theId, String theConditional) throws Exception {
+        delete(client,theId);
+        return create(client,documentReference, theId, theConditional);
     }
 
     @Override

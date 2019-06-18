@@ -18,6 +18,12 @@ public interface IDocumentReference {
 
     DocumentReference read(IGenericClient client, IdType internalId) throws Exception;
 
+    MethodOutcome delete(IGenericClient client, IdType internalId) throws Exception;
+
+    MethodOutcome update(IGenericClient client, DocumentReference composition,
+                             @IdParam IdType theId,
+                             @ConditionalUrlParam String theConditional) throws Exception;
+
     List<DocumentReference> search(IGenericClient client, ReferenceParam patient,
             TokenParam type,
             ReferenceParam org,

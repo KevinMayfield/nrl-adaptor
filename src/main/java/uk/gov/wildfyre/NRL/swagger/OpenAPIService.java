@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL;
+package uk.gov.wildfyre.NRL.swagger;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.apache.commons.io.IOUtils;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.wildfyre.NRL.HapiProperties;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -83,7 +84,7 @@ public class OpenAPIService {
         JSONObject info = new JSONObject();
         obj.put("info",info);
 
-        info.put("version",HapiProperties.getSoftwareVersion());
+        info.put("version", HapiProperties.getSoftwareVersion());
         info.put("title",HapiProperties.getServerName());
         info.put("description","A reference implementation of the "+HapiProperties.getServerName()+" which conforms to the <a href=\"https://nhsconnect.github.io/CareConnectAPI/\" target=\"_blank\">Care Connect API</a> ");
         info.put("termsOfService","http://swagger.io/terms/");
@@ -124,6 +125,16 @@ public class OpenAPIService {
                                 paths.put("/STU3/"+resourceComponent.getType()+"/{id}",resObj);
                             }
                             resObj.put("get",getId(resourceComponent, interactionComponent));
+                            break;
+                        case DELETE:
+                            if (pathMap.containsKey("/STU3/"+resourceComponent.getType()+"/{id}")) {
+                                resObj = (JSONObject) pathMap.get("/STU3/"+resourceComponent.getType()+"/{id}");
+                            } else {
+                                resObj = new JSONObject();
+                                pathMap.put("/STU3/"+resourceComponent.getType()+"/{id}",resObj);
+                                paths.put("/STU3/"+resourceComponent.getType()+"/{id}",resObj);
+                            }
+                            resObj.put("delete",getId(resourceComponent, interactionComponent));
                             break;
                         case SEARCHTYPE:
                             if (pathMap.containsKey("/STU3/"+resourceComponent.getType())) {

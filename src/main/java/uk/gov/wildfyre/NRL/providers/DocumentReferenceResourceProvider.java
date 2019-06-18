@@ -68,17 +68,28 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return outcome;
 
     }
-/*
+
     @Update
     public MethodOutcome update(HttpServletRequest theRequest, @ResourceParam DocumentReference documentReference, @IdParam IdType theId, @ConditionalUrlParam String theConditional, RequestDetails theRequestDetails)
-    throws Exception {
+            throws Exception {
 
-        MethodOutcome outcome =  resourceDao.create(client,documentReference, theId, theConditional);
+        MethodOutcome outcome =  resourceDao.update(client,documentReference, theId, theConditional);
         //log.info(outcome.toString());
         return outcome;
 
     }
-*/
+
+
+    @Delete
+    public MethodOutcome delete(HttpServletRequest theRequest, @IdParam IdType theId, @ConditionalUrlParam String theConditional, RequestDetails theRequestDetails)
+    throws Exception {
+
+        MethodOutcome outcome =  resourceDao.delete(client,theId);
+        //log.info(outcome.toString());
+        return outcome;
+
+    }
+
     @Search
     public List<DocumentReference> search(HttpServletRequest httpRequest,
                                   @OptionalParam(name = DocumentReference.SP_PATIENT) ReferenceParam patient,
