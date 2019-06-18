@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.swagger;
+package uk.gov.wildfyre.NRL.apidocs;
 
 import org.springframework.stereotype.Component;
 import springfox.documentation.swagger.web.SwaggerResource;

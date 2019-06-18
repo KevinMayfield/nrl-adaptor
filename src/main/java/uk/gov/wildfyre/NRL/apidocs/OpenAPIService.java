@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.swagger;
+package uk.gov.wildfyre.NRL.apidocs;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.apache.commons.io.IOUtils;

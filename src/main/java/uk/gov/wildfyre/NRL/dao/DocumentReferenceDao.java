@@ -8,6 +8,7 @@ import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
@@ -113,8 +114,18 @@ public class DocumentReferenceDao implements IDocumentReference {
             query = query.and(DocumentReference.CUSTODIAN.hasChainedProperty(Organization.IDENTIFIER.exactly().systemAndValues("https://fhir.nhs.uk/Id/ods-organization-code", documentQry)) );
         }
 
-        result = (Bundle) query.returnBundle(Bundle.class)
-                .execute();
+        try {
+            result = (Bundle) query.returnBundle(Bundle.class)
+                    .execute();
+        } catch (Exception ex) {
+            // Convert Exception into a standard response
+            if (ex instanceof InvalidRequestException) {
+                return documents;
+            } else {
+                throw ex;
+            }
+
+        }
 
 
         if (result != null && result.getEntry().size() > 0) {
@@ -157,6 +168,7 @@ public class DocumentReferenceDao implements IDocumentReference {
         } else {
             documentReference.setId(theId.getValue());
         }
+        documentReference.setStatus(Enumerations.DocumentReferenceStatus.CURRENT);
 
         if (documentReference.hasSubject()) {
             if (documentReference.getSubject().hasReference()) {

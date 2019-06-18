@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.swagger;
+package uk.gov.wildfyre.NRL.apidocs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
