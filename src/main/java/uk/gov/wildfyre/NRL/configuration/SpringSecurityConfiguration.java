@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.support;
+package uk.gov.wildfyre.NRL.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

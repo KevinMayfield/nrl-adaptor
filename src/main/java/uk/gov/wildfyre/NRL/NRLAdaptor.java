@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import uk.gov.wildfyre.NRL.support.CorsFilter;
-import uk.gov.wildfyre.NRL.support.NRLSSPInterceptor;
+import uk.gov.wildfyre.NRL.interceptor.NRLSSPInterceptor;
 
 @SpringBootApplication
 @EnableSwagger2

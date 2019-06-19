@@ -37,12 +37,7 @@
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot-version}</version>
             </dependency>
-            <!-- Camel BOM -->
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-boot-dependencies</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

@@ -14,7 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import uk.gov.wildfyre.NRL.providers.ConformanceProvider;
 import uk.gov.wildfyre.NRL.providers.DocumentReferenceResourceProvider;
-import uk.gov.wildfyre.NRL.support.ServerInterceptor;
+import uk.gov.wildfyre.NRL.interceptor.ServerInterceptor;
 
 
 import javax.servlet.ServletException;

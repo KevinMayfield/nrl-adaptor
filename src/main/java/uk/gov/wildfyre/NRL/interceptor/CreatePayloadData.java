@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.support;
+package uk.gov.wildfyre.NRL.interceptor;
 
 import com.google.gson.JsonObject;
 import org.jglue.fluentjson.JsonBuilderFactory;
