@@ -70,14 +70,16 @@ public class ConformanceProvider extends ServerCapabilityStatementProvider {
         capabilityStatement.setKind(CapabilityStatement.CapabilityStatementKind.INSTANCE);
 
 
-        if (capabilityStatement.hasImplementation()) {
-            capabilityStatement.getImplementation().setDescription(HapiProperties.getSoftwareImplementationDesc());
-        }
-        if (capabilityStatement.hasSoftware()) {
-            capabilityStatement.getSoftware().setName(HapiProperties.getSoftwareName());
-        }
-        capabilityStatement.setPublisher("Gov UK - Department of Work and Pensions");
+        capabilityStatement.getSoftware().setName(HapiProperties.getSoftwareName());
+        capabilityStatement.getSoftware().setVersion(HapiProperties.getSoftwareVersion());
+        capabilityStatement.getImplementation().setDescription(HapiProperties.getSoftwareImplementationDesc());
+        capabilityStatement.getImplementation().setUrl(HapiProperties.getSoftwareImplementationUrl());
 
+        // KGM only add if not already present
+        if (capabilityStatement.getImplementationGuide().size() == 0) {
+            capabilityStatement.getImplementationGuide().add(new UriType(HapiProperties.getSoftwareImplementationGuide()));
+        }
+        capabilityStatement.setPublisher("NHS Digital & Dept for Work and Pensions");
 
 
         capabilityStatement.setStatus(Enumerations.PublicationStatus.ACTIVE);
