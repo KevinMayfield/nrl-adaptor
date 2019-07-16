@@ -66,6 +66,9 @@ public class HapiProperties {
 
     static final String SECURITY_OAUTH = "security.oauth2";
     static final String SECURITY_OPENID_CONFIG = "security.oauth2.configuration.server";
+    static final String SECURITY_OAUTH2_AUTHORIZE = "security.oauth2.configuration.authorize";
+    static final String SECURITY_OAUTH2_REGISTER = "security.oauth2.configuration.register";
+    static final String SECURITY_OAUTH2_TOKEN = "security.oauth2.configuration.token";
     static final String SECURITY_OAUTH_SCOPE = "security.oauth2.scope";
     static final String SECURITY_SMART_SCOPE = "security.oauth2.smart";
 
@@ -416,8 +419,17 @@ public class HapiProperties {
         return HapiProperties.getProperty(SECURITY_OPENID_CONFIG);
     }
 
-    public static Boolean getSecuritySmartScope() {
-        return HapiProperties.getBooleanProperty(SECURITY_SMART_SCOPE, false);
+
+    public static String getSecurityOauth2Authorize() {
+        return HapiProperties.getProperty(SECURITY_OAUTH2_AUTHORIZE);
+    }
+
+    public static String getSecurityOauth2Register() {
+        return HapiProperties.getProperty(SECURITY_OAUTH2_REGISTER);
+    }
+
+    public static String getSecurityOauth2Token() {
+        return HapiProperties.getProperty(SECURITY_OAUTH2_TOKEN);
     }
 
     public static String getSecurityOauthScope() {
