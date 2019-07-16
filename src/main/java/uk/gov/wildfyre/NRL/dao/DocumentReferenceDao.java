@@ -86,7 +86,8 @@ public class DocumentReferenceDao implements IDocumentReference {
                 query = client.search().forResource(DocumentReference.class)
                         .where(DocumentReference.RES_ID.exactly().code(id.getValue()));
             } else {
-                throw new UnprocessableEntityException("patient or _id must be supplied as search parameters");
+                log.info("patient or _id must be supplied as search parameters");
+                return documents;
             }
 
         }
@@ -184,9 +185,9 @@ public class DocumentReferenceDao implements IDocumentReference {
                     documentReference.setSubject(new Reference("https://demographics.spineservices.nhs.uk/STU3/Patient/" + documentReference.getSubject().getIdentifier().getValue()));
                 }
             }
-            if (!documentReference.getSubject().getReference().contains("https://demographics.spineservices.nhs.uk/STU3/Patient/")) {
-                throw new UnprocessableEntityException("Invalid subject reference");
-            }
+           // if (!documentReference.getSubject().getReference().contains("https://demographics.spineservices.nhs.uk/STU3/Patient/")) {
+           //     throw new UnprocessableEntityException("Invalid subject reference");
+           // }
         } else {
             throw new UnprocessableEntityException("Subject must be present");
         }
@@ -247,9 +248,38 @@ public class DocumentReferenceDao implements IDocumentReference {
 
         documentReference.getType().addCoding()
                 .setSystem("http://snomed.info/sct")
-                .setDisplay("Mental Health Crisis Plan")
+                .setDisplay("Mental health crisis plan")
                 .setCode("736253002");
         documentReference.setContext(null);
+
+        if (!documentReference.hasStatus()) {
+            documentReference.setStatus(Enumerations.DocumentReferenceStatus.CURRENT);
+        }
+        CodeableConcept _class = new CodeableConcept();
+        _class.addCoding()
+                .setCode("734163000")
+                .setSystem("http://snomed.info/sct")
+                .setDisplay("Care plan");
+        documentReference.setClass_(_class);
+
+        DocumentReference.DocumentReferenceContentComponent content = documentReference.getContentFirstRep();
+        if (!content.hasFormat()) {
+            content.setFormat(new Coding()
+                    .setCode("proxy:https://www.iso.org/standard/63534.html")
+                    .setDisplay("PDF")
+                    .setSystem("https://fhir.nhs.uk/STU3/CodeSystem/NRL-FormatCode-1"));
+        }
+
+        if (!content.hasExtension()) {
+            Extension extension = content.addExtension();
+            extension.setUrl("https://fhir.nhs.uk/STU3/StructureDefinition/Extension-NRL-ContentStability-1");
+            CodeableConcept codeableConcept = new CodeableConcept();
+            codeableConcept.addCoding()
+                    .setSystem("https://fhir.nhs.uk/STU3/CodeSystem/NRL-ContentStability-1")
+                    .setCode("static")
+                    .setDisplay("Static");
+            extension.setValue(codeableConcept);
+        }
 
         System.out.println(FhirContext.forDstu3().newJsonParser().setPrettyPrint(true).encodeResourceToString(documentReference));
 
