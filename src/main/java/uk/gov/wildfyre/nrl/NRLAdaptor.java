@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL;
+package uk.gov.wildfyre.nrl;
 
 import ca.uhn.fhir.context.FhirContext;
 
@@ -15,8 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import uk.gov.wildfyre.NRL.support.CorsFilter;
-import uk.gov.wildfyre.NRL.interceptor.NRLSSPInterceptor;
+import uk.gov.wildfyre.nrl.support.CorsFilter;
+import uk.gov.wildfyre.nrl.interceptor.NRLSSPInterceptor;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -35,8 +35,8 @@ public class NRLAdaptor {
     }
 
     @Bean
-    public ServletRegistrationBean ServletRegistrationBean() {
-        ServletRegistrationBean registration = new ServletRegistrationBean(new RestfulServer(context), "/STU3/*");
+    public ServletRegistrationBean servletRegistrationBean() {
+        ServletRegistrationBean registration = new ServletRegistrationBean(new CustomRestfulServer(context), "/STU3/*");
         registration.setName("FhirServlet");
         registration.setLoadOnStartup(1);
         return registration;
@@ -52,7 +52,7 @@ public class NRLAdaptor {
 
     @Bean
     @Primary
-    public FhirContext FhirContextBean() {
+    public FhirContext fhirContextBean() {
         return FhirContext.forDstu3();
     }
 
@@ -63,7 +63,7 @@ public class NRLAdaptor {
         NRLSSPInterceptor sspInterceptor = new NRLSSPInterceptor();
 
         IGenericClient client = ctx.newRestfulGenericClient(HapiProperties.getNhsServer());
-     //   client.registerInterceptor(CreateAuthToken.createAuthInterceptor(false));
+
         client.registerInterceptor(sspInterceptor );
         return client;
     }

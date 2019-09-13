@@ -1,8 +1,8 @@
-package uk.gov.wildfyre.NRL.apidocs;
+package uk.gov.wildfyre.nrl.apidocs;
 
 import org.springframework.stereotype.Component;
 import springfox.documentation.swagger.web.SwaggerResource;
-import uk.gov.wildfyre.NRL.HapiProperties;
+import uk.gov.wildfyre.nrl.HapiProperties;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,10 @@
-package uk.gov.wildfyre.NRL.interceptor;
+package uk.gov.wildfyre.nrl.interceptor;
 
 import ca.uhn.fhir.rest.client.api.IClientInterceptor;
 import ca.uhn.fhir.rest.client.api.IHttpRequest;
 import ca.uhn.fhir.rest.client.api.IHttpResponse;
 import io.jsonwebtoken.Jwts;
-import uk.gov.wildfyre.NRL.HapiProperties;
+import uk.gov.wildfyre.nrl.HapiProperties;
 
 import java.io.IOException;
 import java.util.*;
@@ -32,8 +32,6 @@ public class NRLSSPInterceptor implements IClientInterceptor {
 
         iHttpRequest.addHeader("toASID",HapiProperties.getNhsAsidTo());
 
-      //  iHttpRequest.addHeader("Ssp-TraceID", UUID.randomUUID().toString());
-
         Date exp = new Date(System.currentTimeMillis() + 300000);
         Date iat = new Date(System.currentTimeMillis());
 
@@ -58,12 +56,12 @@ public class NRLSSPInterceptor implements IClientInterceptor {
         Iterator it = headers.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            log.trace(pair.getKey() + " = " + pair.getValue());
+            log.trace("{} = {}",pair.getKey() , pair.getValue());
         }
     }
 
     @Override
     public void interceptResponse(IHttpResponse iHttpResponse) throws IOException {
-
+        // No action
     }
 }

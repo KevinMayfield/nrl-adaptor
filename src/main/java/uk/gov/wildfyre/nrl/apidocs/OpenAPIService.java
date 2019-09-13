@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.gpcadaptor.apidocs;
+package uk.gov.wildfyre.nrl.apidocs;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.apache.commons.io.IOUtils;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.wildfyre.gpcadaptor.HapiProperties;
+import uk.gov.wildfyre.nrl.HapiProperties;
 
 import java.io.IOException;
 import java.net.UnknownHostException;

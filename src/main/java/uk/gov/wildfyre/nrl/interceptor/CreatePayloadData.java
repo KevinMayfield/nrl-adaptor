@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.interceptor;
+package uk.gov.wildfyre.nrl.interceptor;
 
 import com.google.gson.JsonObject;
 import org.jglue.fluentjson.JsonBuilderFactory;
@@ -17,6 +17,9 @@ public class CreatePayloadData {
             case "PUT":
             case "DELETE":
                 scope = "patient/DocumentReference.write";
+                break;
+            default:
+                break;
 
         }
 
@@ -38,18 +41,11 @@ public class CreatePayloadData {
                 .add("requesting_user", "https://fhir.nhs.uk/Id/sds-role-profile-id|fakeRoleId")
                 .getJson();
 
-        String json = jsonObject. toString();
+        return jsonObject.toString();
 
-        return json;
     }
 
-    private String getScope(boolean write) {
-        String scope = "patient/*.read";
-        if (write) {
-            scope = "patient/*.write";
-        }
-        return scope;
-    }
+
 
     public JsonObjectBuilder<?,JsonObject> getName(String nameType, String name) {
         return JsonBuilderFactory.buildObject()

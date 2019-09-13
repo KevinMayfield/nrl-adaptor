@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.support;
+package uk.gov.wildfyre.nrl.support;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

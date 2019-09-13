@@ -1,4 +1,4 @@
-package uk.gov.wildfyre.NRL.support;
+package uk.gov.wildfyre.nrl.support;
 
 
 import ca.uhn.fhir.rest.server.exceptions.*;
