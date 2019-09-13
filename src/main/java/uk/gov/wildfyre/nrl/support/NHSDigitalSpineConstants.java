@@ -7,11 +7,11 @@ public final class NHSDigitalSpineConstants {
     }
 
     public static final  class Url {
-            public final static String BASE = "https://demographics.spineservices.nhs.uk/STU3/";
+            public static final String BASE = "https://demographics.spineservices.nhs.uk/STU3/";
 
-            public final static String PATIENT = "https://demographics.spineservices.nhs.uk/STU3/Patient/";
+            public static final String PATIENT = "https://demographics.spineservices.nhs.uk/STU3/Patient/";
 
-            public final static String ORGANISATION = "https://directory.spineservices.nhs.uk/STU3/Organization/";
+            public static final String ORGANISATION = "https://directory.spineservices.nhs.uk/STU3/Organization/";
     }
 
 }

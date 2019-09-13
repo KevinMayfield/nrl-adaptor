@@ -8,10 +8,10 @@ public final class CareConnectConstants {
 
         private IdentifierSystem () {}
 
-        public final static String NHS_NUMBER =  "https://fhir.nhs.uk/Id/nhs-number";
+        public static final String NHS_NUMBER =  "https://fhir.nhs.uk/Id/nhs-number";
 
-        public final static String SDS_ORGANISATION_CODE = "https://fhir.nhs.uk/Id/ods-organization-code";
+        public static final String SDS_ORGANISATION_CODE = "https://fhir.nhs.uk/Id/ods-organization-code";
     }
 
-    public final static String JSON_CONTENT_TYPE = "application/json+fhir;charset=UTF-8";
+    public static final String JSON_CONTENT_TYPE = "application/json+fhir;charset=UTF-8";
 }
