@@ -7,6 +7,7 @@ import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.HardcodedServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
+import ca.uhn.fhir.rest.server.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.util.VersionUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
@@ -88,6 +89,9 @@ public class CustomRestfulServer extends ca.uhn.fhir.rest.server.RestfulServer {
         // Create the interceptor and register it
         CorsInterceptor interceptor = new CorsInterceptor(config);
         getInterceptorService().registerInterceptor(interceptor);
+
+        LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
+        getInterceptorService().registerInterceptor(loggingInterceptor);
 
         FifoMemoryPagingProvider pp = new FifoMemoryPagingProvider(10);
         pp.setDefaultPageSize(10);
