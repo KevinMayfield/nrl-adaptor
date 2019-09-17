@@ -12,9 +12,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.wildfyre.nrl.HapiProperties;
+import uk.gov.wildfyre.nrl.support.FhirMediaType;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -35,8 +37,8 @@ public class OpenAPIService {
 
     @Value("${server.servlet.context-path}")
     private String serverPath;
-    
-    private static String fhirVersion = "/STU3/";
+
+    private static final String FHIR_VERSION = "/STU3/";
 
     JSONObject paths = null;
 
@@ -49,8 +51,8 @@ public class OpenAPIService {
         String apidocs = "http://localhost:"+serverPort+serverPath+"/STU3/metadata";
 
         HttpGet request = new HttpGet(apidocs);
-        request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-        request.setHeader(HttpHeaders.ACCEPT, "application/json");
+        request.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        request.setHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
 
         try {
 
@@ -63,7 +65,7 @@ public class OpenAPIService {
                 log.trace("{}",body);
 
                 CapabilityStatement capabilityStatement = (CapabilityStatement) ctx.newJsonParser().parseResource(body);
-            
+
                 return parseConformanceStatement(capabilityStatement);
 
             }
@@ -102,8 +104,8 @@ public class OpenAPIService {
         opObjC.put("description","FHIR Server Capability Statement");
         opObjC.put("consumes", new JSONArray());
         JSONArray pc = new JSONArray();
-        pc.put("application/fhir+json");
-        pc.put("application/fhir+xml");
+        pc.put(FhirMediaType.APPLICATION_FHIR_JSON_VALUE);
+        pc.put(FhirMediaType.APPLICATION_FHIR_XML_VALUE);
         opObjC.put("produces",pc);
         JSONArray paramsC = new JSONArray();
         opObjC.put("parameters", paramsC);
@@ -143,28 +145,28 @@ public class OpenAPIService {
     }
 
     private void processMethodId(String method, Map pathMap,
-                                   CapabilityStatement.CapabilityStatementRestResourceComponent resourceComponent,
-                                   CapabilityStatement.ResourceInteractionComponent interactionComponent) {
+                                 CapabilityStatement.CapabilityStatementRestResourceComponent resourceComponent,
+                                 CapabilityStatement.ResourceInteractionComponent interactionComponent) {
         JSONObject resObj = null;
-        if (pathMap.containsKey(serverPath + fhirVersion+resourceComponent.getType()+"/{id}")) {
-            resObj = (JSONObject) pathMap.get(serverPath + fhirVersion+resourceComponent.getType()+"/{id}");
+        if (pathMap.containsKey(serverPath + FHIR_VERSION+resourceComponent.getType()+"/{id}")) {
+            resObj = (JSONObject) pathMap.get(serverPath + FHIR_VERSION+resourceComponent.getType()+"/{id}");
         } else {
             resObj = new JSONObject();
-            pathMap.put(serverPath + fhirVersion+resourceComponent.getType()+"/{id}",resObj);
-            paths.put(serverPath + fhirVersion+resourceComponent.getType()+"/{id}",resObj);
+            pathMap.put(serverPath + FHIR_VERSION+resourceComponent.getType()+"/{id}",resObj);
+            paths.put(serverPath + FHIR_VERSION+resourceComponent.getType()+"/{id}",resObj);
         }
         resObj.put(method,getId(resourceComponent, interactionComponent));
     }
     private void processMethodType(String method, Map pathMap,
-                                     CapabilityStatement.CapabilityStatementRestResourceComponent resourceComponent,
-                                     CapabilityStatement.ResourceInteractionComponent interactionComponent) {
+                                   CapabilityStatement.CapabilityStatementRestResourceComponent resourceComponent,
+                                   CapabilityStatement.ResourceInteractionComponent interactionComponent) {
         JSONObject resObj = null;
-        if (pathMap.containsKey(serverPath + fhirVersion+resourceComponent.getType())) {
-            resObj = (JSONObject) pathMap.get(serverPath + fhirVersion+resourceComponent.getType());
+        if (pathMap.containsKey(serverPath + FHIR_VERSION+resourceComponent.getType())) {
+            resObj = (JSONObject) pathMap.get(serverPath + FHIR_VERSION+resourceComponent.getType());
         } else {
             resObj = new JSONObject();
-            pathMap.put(serverPath + fhirVersion+resourceComponent.getType(),resObj);
-            paths.put(serverPath + fhirVersion+resourceComponent.getType(),resObj);
+            pathMap.put(serverPath + FHIR_VERSION+resourceComponent.getType(),resObj);
+            paths.put(serverPath + FHIR_VERSION+resourceComponent.getType(),resObj);
         }
         resObj.put(method,getSearch(resourceComponent, interactionComponent));
 
@@ -176,15 +178,15 @@ public class OpenAPIService {
         JSONObject opObj = new JSONObject();
 
         opObj.put("description","For detailed description see: "
-         +"<a href=\"https://hl7.org/fhir/stu3/"+resourceComponent.getType()+".html\" target=\"_blank\">FHIR "+resourceComponent.getType()+"</a> ");
+                +"<a href=\"https://hl7.org/fhir/stu3/"+resourceComponent.getType()+".html\" target=\"_blank\">FHIR "+resourceComponent.getType()+"</a> ");
         JSONArray c = new JSONArray();
-        c.put("application/fhir+json");
-        c.put("application/fhir+xml");
+        c.put(FhirMediaType.APPLICATION_FHIR_JSON_VALUE);
+        c.put(FhirMediaType.APPLICATION_FHIR_XML_VALUE);
         opObj.put("consumes", c);
 
         JSONArray ps = new JSONArray();
-        ps.put("application/fhir+json");
-        ps.put("application/fhir+xml");
+        ps.put(FhirMediaType.APPLICATION_FHIR_JSON_VALUE);
+        ps.put(FhirMediaType.APPLICATION_FHIR_XML_VALUE);
         opObj.put("produces",ps);
         JSONArray paramss = new JSONArray();
         opObj.put("parameters", paramss);
@@ -197,8 +199,8 @@ public class OpenAPIService {
                 parms.put("in", "query");
                 parms.put("description", search.getDocumentation());
                 parms.put("required", false);
-               // parms.put("schema", new JSONObject()
-                       parms.put("type", "string");
+                // parms.put("schema", new JSONObject()
+                parms.put("type", "string");
             }
         }
         if (interactionComponent.getCode().equals(CapabilityStatement.TypeRestfulInteraction.CREATE)) {
@@ -209,8 +211,8 @@ public class OpenAPIService {
             parm.put("in", "body");
             parm.put("description", "The resource ");
             parm.put("required", true);
-           // parm.put("schema",  new JSONObject()
-                    parm.put("type","object");
+            // parm.put("schema",  new JSONObject()
+            parm.put("type","object");
             opObj.put("responses", getResponses());
         }
 
@@ -226,12 +228,12 @@ public class OpenAPIService {
                 "For detailed description see: <a href=\"https://hl7.org/fhir/stu3/"+resourceComponent.getType()+".html\" target=\"_blank\">FHIR "+resourceComponent.getType()+"</a> ");
 
         JSONArray c = new JSONArray();
-        c.put("application/fhir+json");
-        c.put("application/fhir+xml");
+        c.put(FhirMediaType.APPLICATION_FHIR_JSON_VALUE);
+        c.put(FhirMediaType.APPLICATION_FHIR_XML_VALUE);
         opObj.put("consumes", c);
         JSONArray p = new JSONArray();
-        p.put("application/fhir+json");
-        p.put("application/fhir+xml");
+        p.put(FhirMediaType.APPLICATION_FHIR_JSON_VALUE);
+        p.put(FhirMediaType.APPLICATION_FHIR_XML_VALUE);
         opObj.put("produces",p);
         JSONArray params = new JSONArray();
         opObj.put("parameters", params);
@@ -241,8 +243,8 @@ public class OpenAPIService {
         parm.put("in", "path");
         parm.put("description", "The logical id of the resource");
         parm.put("required", true);
-       // parm.put("schema",  new JSONObject()
-                parm.put("type","string");
+
+        parm.put("type","string");
         opObj.put("responses", getResponses());
         if (interactionComponent.getCode().equals(CapabilityStatement.TypeRestfulInteraction.UPDATE)) {
 
@@ -252,8 +254,8 @@ public class OpenAPIService {
             parm.put("in", "body");
             parm.put("description", "The resource ");
             parm.put("required", true);
-            //parm.put("schema",  new JSONObject()
-                    parm.put("type","object");
+
+            parm.put("type","object");
             opObj.put("responses", getResponses());
         }
         return opObj;
